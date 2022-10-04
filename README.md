@@ -21,3 +21,10 @@ using namespace Hash;
 Sha2<HashType::Sha256> hash256;
 std::cout << hash256.Hash("The quick brown fox jumps over the lazy dog") << std::endl;
 ```
+
+Run the provided test application to check that
+```bash
+cmake .
+make
+./sha2cpp
+```
