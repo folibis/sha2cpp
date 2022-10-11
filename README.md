@@ -16,13 +16,14 @@ Supported hash types:
 ```cpp
 #include "Sha2.h"
 
-using namespace Hash;
+using namespace Sha2Cpp;
 
 Sha2<HashType::Sha256> hash256;
 std::cout << hash256.Hash("The quick brown fox jumps over the lazy dog") << std::endl;
+>>> d7a8fbb307d7809469ca9abcb0082e4f8d5651e46d3cdb762d02d0bf37c9e592
 ```
 
-Run the provided test application to check that
+Run the test application to test that
 ```bash
 cmake .
 make

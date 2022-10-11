@@ -37,7 +37,7 @@
 #define MIN(n1,n2) ((n1) < (n2) ? (n1) : (n2))
 
 
-namespace Hash
+namespace Sha2Cpp
 {
 
 enum class HashType
