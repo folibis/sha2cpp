@@ -360,7 +360,7 @@ std::vector<TestCase> testCases_HMAC = {
 #endif
 };
 
-#ifdef __linux__
+#if defined __linux__ || __APPLE__
 
 #define FgBlack "\e[1;30m"
 #define FgRed "\e[1;31m"
@@ -381,22 +381,22 @@ std::vector<TestCase> testCases_HMAC = {
 #define Clear "\e[0m"
 
 #else
-#define FgWhite ""
 #define FgBlack ""
-#define FgGreen ""
 #define FgRed ""
+#define FgGreen ""
 #define FgYellow ""
 #define FgBlue ""
 #define FgMagenta ""
 #define FgCyan ""
 #define FgWhite ""
 #define BgBlack ""
-#define BgGreen ""
 #define BgRed ""
+#define BgGreen ""
 #define BgYellow ""
 #define BgBlue ""
 #define BgMagenta ""
 #define BgCyan ""
+#define BgWhite ""
 #define Clear ""
 #endif
 
@@ -457,5 +457,5 @@ int main()
     std::cout << "total: " << i << " tests, " << (failed > 0 ? FgRed : FgGreen) << failed << " failed" << Clear
               << std::endl;
 
-    return 0;
+    return failed == 0 ? 0 : (-1);
 }
