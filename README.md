@@ -10,7 +10,7 @@ Supported hash types:
 - Sha384
 - Sha512/256
 - Sha512/224
-
+- HMAC
 # Usage
 
 ```cpp
@@ -19,7 +19,9 @@ Supported hash types:
 using namespace Sha2Cpp;
 
 Sha2<HashType::Sha256> hash256;
-std::vector<uint8_t> hash = hash256.Hash("The quick brown fox jumps over the lazy dog") << std::endl;
+std::vector<uint8_t> hash = hash256.Hash("The quick brown fox jumps over the lazy dog");
+
+std::vector<uint8_t> hmac = hash256.HMAC("The quick brown fox jumps over the lazy dog", "some key");
 ```
 
 Run the test application to test that
