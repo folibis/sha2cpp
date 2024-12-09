@@ -422,7 +422,7 @@ int main()
     size_t i = 0;
     size_t failed = 0;
 
-    std::cout << BgWhite << FgBlack << "---------------- Hashes tests ----------------\n" << Clear << std::endl;
+    std::cout << BgWhite << FgBlack << "---------------- Hashes tests ----------------" << Clear << "\n" << std::endl;
     for (auto const &test : testCases)
     {
         std::vector<uint8_t> hash = testInstances.Hash(test.type, test.str);
@@ -438,7 +438,7 @@ int main()
         std::cout << std::endl;
     }
 
-    std::cout << BgWhite << FgBlack << "---------------- HMAC tests ----------------\n" << Clear << std::endl;
+    std::cout << BgWhite << FgBlack << "---------------- HMAC tests ----------------" << Clear << "\n" << std::endl;
     for (auto const &test : testCases_HMAC)
     {
         std::vector<uint8_t> hash = testInstances.HMAC(test.type, test.str, test.key);
