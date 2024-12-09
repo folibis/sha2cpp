@@ -38,3 +38,7 @@ if(BUILD_WITH_SHA512_256)
     message(STATUS "Configure with SHA512/256 support")
     target_compile_definitions(${PROJECT_NAME} PUBLIC -DWITH_SHA512_256)
 endif()
+
+enable_testing()
+
+add_test(NAME sha2cpp_test COMMAND sha2cpp)
