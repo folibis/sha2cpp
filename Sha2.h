@@ -39,11 +39,9 @@ namespace Sha2Cpp {
 
 enum class HashType { Sha256, Sha224, Sha512, Sha384, Sha512_256, Sha512_224 };
 
-template<HashType T>
-class Sha2Base;
+template <HashType T> class Sha2Base;
 
-class Sha32Data
-{
+class Sha32Data {
 protected:
     const uint32_t K[64] = {0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4,
                             0xab1c5ed5, 0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe,
@@ -63,9 +61,7 @@ protected:
 };
 
 #ifdef WITH_SHA256
-template<>
-class Sha2Base<HashType::Sha256> : public Sha32Data
-{
+template <> class Sha2Base<HashType::Sha256> : public Sha32Data {
 protected:
     using BaseType = uint32_t;
     constexpr static size_t BlockSize = 64;
@@ -78,9 +74,7 @@ protected:
 #endif
 
 #ifdef WITH_SHA224
-template<>
-class Sha2Base<HashType::Sha224> : public Sha32Data
-{
+template <> class Sha2Base<HashType::Sha224> : public Sha32Data {
 protected:
     using BaseType = uint32_t;
     constexpr static size_t BlockSize = 64;
@@ -92,8 +86,7 @@ protected:
 };
 #endif
 
-class Sha64Data
-{
+class Sha64Data {
 protected:
     const uint64_t K[128] = {0x428a2f98d728ae22, 0x7137449123ef65cd, 0xb5c0fbcfec4d3b2f, 0xe9b5dba58189dbbc,
                              0x3956c25bf348b538, 0x59f111f1b605d019, 0x923f82a4af194f9b, 0xab1c5ed5da6d8118,
@@ -123,9 +116,7 @@ protected:
 };
 
 #ifdef WITH_SHA512
-template<>
-class Sha2Base<HashType::Sha512> : public Sha64Data
-{
+template <> class Sha2Base<HashType::Sha512> : public Sha64Data {
 protected:
     using BaseType = uint64_t;
     constexpr static size_t BlockSize = 128;
@@ -145,9 +136,7 @@ protected:
 #endif
 
 #ifdef WITH_SHA384
-template<>
-class Sha2Base<HashType::Sha384> : public Sha64Data
-{
+template <> class Sha2Base<HashType::Sha384> : public Sha64Data {
 protected:
     using BaseType = uint64_t;
     constexpr static size_t BlockSize = 128;
@@ -166,9 +155,7 @@ protected:
 #endif
 
 #ifdef WITH_SHA512_256
-template<>
-class Sha2Base<HashType::Sha512_256> : public Sha64Data
-{
+template <> class Sha2Base<HashType::Sha512_256> : public Sha64Data {
 protected:
     using BaseType = uint64_t;
     constexpr static size_t BlockSize = 128;
@@ -187,9 +174,7 @@ protected:
 #endif
 
 #ifdef WITH_SHA512_224
-template<>
-class Sha2Base<HashType::Sha512_224> : public Sha64Data
-{
+template <> class Sha2Base<HashType::Sha512_224> : public Sha64Data {
 protected:
     using BaseType = uint64_t;
     constexpr static size_t BlockSize = 128;
@@ -207,15 +192,13 @@ protected:
 };
 #endif
 
-template<HashType T>
-class Sha2 : public Sha2Base<T>
-{
+template <HashType T> class Sha2 : public Sha2Base<T> {
 public:
     std::vector<uint8_t> Hash(const std::string &str) { return Hash(std::vector<uint8_t>(str.begin(), str.end())); }
 
     std::vector<uint8_t> Hash(const std::vector<uint8_t> &message)
     {
-        if (message.size() & 0xE000000000000000)
+        if(message.size() & 0xE000000000000000)
         {
             // actually the sha512 length can be up to 2^128-1 bits but it seems
             // logical to me to limit the length to 64 bits (or 61 bytes) in order
@@ -236,7 +219,7 @@ public:
 
         // copy message length bytes
         auto pad2 = std::vector<uint8_t>(sizeBlockLength, 0);
-        for (size_t i = 0; i < sizeof(uint64_t); i++)
+        for(size_t i = 0; i < sizeof(uint64_t); i++)
         {
             pad2[sizeBlockLength - i - 1] = ((messageLength >> (i * 8)) & 0xFF);
         }
@@ -251,14 +234,14 @@ public:
         BaseType Hlocal[8];
         BaseType value[8];
 
-        for (size_t i = 0; i < 8; i++)
+        for(size_t i = 0; i < 8; i++)
         {
             Hlocal[i] = H[i];
         }
 
-        while (pos < total)
+        while(pos < total)
         {
-            if (pos == message.size())
+            if(pos == message.size())
             {
                 ptr = padding.data();
                 dpos = 0;
@@ -269,9 +252,9 @@ public:
             dpos++;
             pos++;
 
-            if ((pos % BlockSize) == 0)
+            if((pos % BlockSize) == 0)
             {
-                for (size_t i = 16; i < RoundCount; i++)
+                for(size_t i = 16; i < RoundCount; i++)
                 {
                     BaseType wk = W[i - 16];
                     BaseType wl = W[i - 7];
@@ -282,12 +265,12 @@ public:
                     W[i] = wk + sig0 + wl + sig1;
                 }
 
-                for (size_t i = 0; i < 8; i++)
+                for(size_t i = 0; i < 8; i++)
                 {
                     value[i] = Hlocal[i];
                 }
 
-                for (size_t i = 0; i < RoundCount; i++)
+                for(size_t i = 0; i < RoundCount; i++)
                 {
                     BaseType s1 = sum1(value[4]);
                     BaseType choice = (value[4] & value[5]) ^ ((~value[4]) & value[6]);
@@ -306,12 +289,12 @@ public:
                     value[0] = temp1 + temp2;
                 }
 
-                for (size_t i = 0; i < 8; i++)
+                for(size_t i = 0; i < 8; i++)
                 {
                     Hlocal[i] += value[i];
                 }
 
-                if (pos < total)
+                if(pos < total)
                 {
                     clear(W, RoundCount);
                 }
@@ -320,7 +303,7 @@ public:
 
         std::vector<uint8_t> retval(ResultBytes);
 
-        for (size_t i = 0; i < ResultBytes; i += BaseTypeSize)
+        for(size_t i = 0; i < ResultBytes; i += BaseTypeSize)
         {
             Sha2::num2arr(Hlocal[i / BaseTypeSize], std::min(ResultBytes - i, BaseTypeSize), retval, i);
         }
@@ -328,29 +311,48 @@ public:
         return retval;
     }
 
-    std::vector<uint8_t> HMAC(const std::string &text, const std::string &key)
+    template<typename L, typename = void>
+    struct is_container : std::false_type
     {
-        return HMAC(std::vector<uint8_t>(text.begin(), text.end()), std::vector<uint8_t>(key.begin(), key.end()));
-    }
+    };
 
-    std::vector<uint8_t> HMAC(const std::vector<uint8_t> &text, const std::vector<uint8_t> &key)
+    template<typename L>
+    struct is_container<L,
+                        std::void_t<typename L::value_type,
+                                    typename L::size_type,
+                                    decltype(std::declval<L>().size()),
+                                    decltype(std::declval<L>().begin()),
+                                    decltype(std::declval<L>().end())>> : std::true_type
     {
+    };
+
+    template<typename L>
+    struct is_container_value
+    {
+        static const bool value = is_container<L>::value;
+    };
+
+    template<typename T1, typename T2>
+    std::vector<uint8_t> HMAC(const T1 &text, const T2 &key)
+    {
+        static_assert(is_container_value<T1>::value, "Must be a container");
+        static_assert(is_container_value<T2>::value, "Must be a container");
         std::vector<uint8_t> key_padded(BlockSize, 0x0);
 
         size_t copy_size = std::min(key.size(), size_t(BlockSize));
-        for (size_t i = 0; i < copy_size; ++i)
+        for(size_t i = 0; i < copy_size; ++i)
         {
             key_padded[i] = key[i];
         }
 
         std::vector<uint8_t> inner_key = key_padded;
-        for (size_t i = 0; i < inner_key.size(); ++i)
+        for(size_t i = 0; i < inner_key.size(); ++i)
         {
             inner_key[i] ^= inner_pad_const;
         }
 
         std::vector<uint8_t> outer_key = key_padded;
-        for (size_t i = 0; i < outer_key.size(); ++i)
+        for(size_t i = 0; i < outer_key.size(); ++i)
         {
             outer_key[i] ^= outer_pad_const;
         }
@@ -380,7 +382,7 @@ private:
 protected:
     void clear(BaseType *arr, size_t size)
     {
-        for (size_t i = 0; i < size; i++)
+        for(size_t i = 0; i < size; i++)
         {
             arr[i] = 0;
         }
@@ -388,7 +390,7 @@ protected:
 
     static void num2arr(BaseType n, size_t len, std::vector<uint8_t> &arr, size_t pos)
     {
-        for (size_t i = 0; i < len; ++i)
+        for(size_t i = 0; i < len; ++i)
         {
             arr[i + pos] = static_cast<uint8_t>(n >> ((sizeof(n) - i - 1) * 8) & 0xFF);
         }
