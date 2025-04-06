@@ -26,6 +26,7 @@
 #define SHA2_H
 
 #include <algorithm>
+#include <cstdint>
 #include <string>
 #include <vector>
 
@@ -302,7 +303,6 @@ public:
         }
 
         std::vector<uint8_t> retval(ResultBytes);
-
         for(size_t i = 0; i < ResultBytes; i += BaseTypeSize)
         {
             Sha2::num2arr(Hlocal[i / BaseTypeSize], std::min(ResultBytes - i, BaseTypeSize), retval, i);
